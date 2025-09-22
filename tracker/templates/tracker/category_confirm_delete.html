@@ -1,0 +1,21 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<style>
+    .card { background: #ffffff; border-radius: 10px; padding: 20px; margin: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+    .btn { background-color: #4a9c8f; border: none; border-radius: 5px; padding: 10px 20px; color: #ffffff; }
+    .btn:hover { background-color: #3d7f72; }
+    .btn-danger { background-color: #e56b6f; }
+    .btn-danger:hover { background-color: #d9534f; }
+</style>
+<h1 class="text-center mb-4">Delete Category</h1>
+<div class="card">
+    <p>Are you sure you want to delete the category "{{ category.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'category_list' %}" class="btn">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

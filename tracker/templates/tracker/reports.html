@@ -1,0 +1,72 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<style>
+    .card { 
+        background: #ffffff; 
+        border-radius: 10px; 
+        padding: 20px; 
+        margin: 10px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        transition: transform 0.2s; 
+    }
+    .card:hover { transform: translateY(-5px); }
+
+    .pie-chart { 
+        position: relative; 
+        height: 300px; 
+        width: 100%; 
+        margin: 20px 0; 
+    }
+
+    .income-chart { border: 2px solid #ff8c00; } 
+    .expense-chart { border: 2px solid #d4a017; } 
+    .balance-chart { border: 2px solid #b56576; } 
+</style>
+
+<h1 class="text-center mb-4">Reports</h1>
+
+<div class="card">
+    <h5 class="card-title text-center">Income vs Expense vs Balance</h5>
+    <div class="pie-chart">
+        <canvas id="pieChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const pieChart = new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Income', 'Expense', 'Balance'],
+            datasets: [{
+                data: [
+                    parseFloat("{{ chart_data.total_income|default:'0'|escapejs }}".replace(/,/g, '')) || 0,
+                    parseFloat("{{ chart_data.total_expense|default:'0'|escapejs }}".replace(/,/g, '')) || 0,
+                    parseFloat("{{ chart_data.total_balance|default:'0'|escapejs }}".replace(/,/g, '')) || 0
+                ],
+                backgroundColor: [
+                    '#ff8c00',
+                    '#d4a017',
+                    '#b56576'
+                ],
+                borderColor: ['#ffffff', '#ffffff', '#ffffff'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': $' + Number(context.raw).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

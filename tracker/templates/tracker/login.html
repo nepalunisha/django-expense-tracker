@@ -1,0 +1,142 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    .login-container {
+        display: flex;
+        min-height: 90vh;
+    }
+
+    .welcome-section {
+        flex: 1;
+        background-color: #43796D;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 40px;
+    }
+
+    .welcome-section h1 {
+        font-size: 2.2em;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .welcome-section p {
+        font-size: 1em;
+        opacity: 0.9;
+    }
+
+    .login-section {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff;
+        padding: 40px;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 350px;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+        color: #43796D;
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1em;
+    }
+
+    .form-control:focus {
+        border-color: #43796D;
+        outline: none;
+        box-shadow: 0 0 5px rgba(67,121,109,0.4);
+    }
+
+    .btn {
+        background-color: #43796D;
+        border: none;
+        border-radius: 6px;
+        padding: 12px;
+        color: #ffffff;
+        width: 100%;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #579183;
+    }
+
+    .register-link {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .register-link a {
+        color: #d9534f;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .register-link a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .login-container {
+            flex-direction: column;
+        }
+        .welcome-section, .login-section {
+            flex: none;
+            width: 100%;
+            min-height: auto;
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="login-container">
+    <div class="welcome-section">
+        <h1>Welcome back, Unisha!</h1>
+        <p>Please login with your credentials</p>
+    </div>
+
+    <div class="login-section">
+        <div class="card">
+            <h2>Login</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username" class="form-control" required>
+                <input type="password" name="password" placeholder="Password" class="form-control" required>
+                <button type="submit" class="btn">Sign In</button>
+            </form>
+            <div class="register-link">
+                <p>Don’t have an account? <a href="{% url 'register' %}">Register</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

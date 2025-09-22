@@ -1,0 +1,61 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<style>
+    .forecast-container { display: flex; justify-content: center; align-items: center; flex-direction: column; }
+    .btn-custom { background-color: #43796D; color: #ffffff; border: none; padding: 10px 20px; border-radius: 5px; margin-bottom: 20px; align-self: flex-end; }
+    .btn-custom:hover { background-color: #356359; color: #ffffff; }
+    canvas { max-width: 900px; width: 100%; height: 500px; margin: auto; display: block; }
+</style>
+
+<div class="forecast-container">
+    <div style="width: 100%; display: flex; justify-content: flex-end;">
+        <a href="{% url 'download_forecast_csv' %}" class="btn btn-custom">Download Forecast CSV</a>
+    </div>
+    <h1 class="text-center mb-4">Expense Forecast (Next month)</h1>
+    <canvas id="forecastChart"></canvas>
+</div>
+
+{{ chart_labels|json_script:"chart-labels" }}
+{{ chart_data|json_script:"chart-data" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const chartLabels = JSON.parse(document.getElementById('chart-labels').textContent);
+    const chartData = JSON.parse(document.getElementById('chart-data').textContent);
+
+    const ctx = document.getElementById('forecastChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: 'Predicted Expense (INR)',
+                data: chartData,
+                borderColor: '#ff8c00',
+                backgroundColor: 'rgba(255, 140, 0, 0.2)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 4,
+                pointBackgroundColor: '#ff8c00'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true, position: 'top' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return '₹ ' + context.raw.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { title: { display: true, text: 'Date' } },
+                y: { title: { display: true, text: 'Predicted Expense (INR)' } }
+            }
+        }
+    });
+</script>
+{% endblock %}

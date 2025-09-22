@@ -1,0 +1,112 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<style>
+body { background-color: #ffffff; color: #3d5a80; font-family: 'Roboto', sans-serif; }
+.card { background: #ffffff; border-radius: 10px; padding: 20px; margin: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.2s; }
+.card:hover { transform: translateY(-5px); }
+.chart-container { position: relative; margin: 0 auto; }
+.income-chart { border: 2px solid #d9534f; }
+.expense-chart { border: 2px solid #d4a017; }
+.balance-chart { border: 2px solid #B56576; }
+.btn { background-color: #4a9c8f; border: none; border-radius: 5px; padding: 10px 20px; color: #fff; }
+.btn:hover { background-color: #3d7f72; }
+.list-group-item { background-color: #ffffff; border-color: #333; }
+.navbar, .header { background-color: #3d7f72 !important; color: #fff !important; }
+.navbar a, .header a { color: #fff !important; }
+h1 { color: #3d5a80; }
+.chart-container-large { height: 400px; width: 80%; margin: 0 auto; }
+</style>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card income-chart">
+            <h5 class="card-title text-center">Total Income</h5>
+            <div class="chart-container"><canvas id="incomeChart"></canvas></div>
+            <p class="text-center mt-2">₹{{ total_income|floatformat:2 }}</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card expense-chart">
+            <h5 class="card-title text-center">Total Expenses</h5>
+            <div class="chart-container"><canvas id="expenseChart"></canvas></div>
+            <p class="text-center mt-2">₹{{ total_expense|floatformat:2 }}</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card balance-chart">
+            <h5 class="card-title text-center">Balance</h5>
+            <div class="chart-container"><canvas id="balanceChart"></canvas></div>
+            <p class="text-center mt-2">₹{{ balance|floatformat:2 }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <h5 class="card-title text-center">Income vs Expense</h5>
+            <div class="chart-container" style="height:300px; width:100%;">
+                <canvas id="dashboardBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h3 class="mb-3">Recent Incomes</h3>
+        <ul class="list-group">
+            {% for income in recent_incomes %}
+            <li class="list-group-item">{{ income.date }} - {{ income.description }} ({{ income.category }}): ₹{{ income.amount|floatformat:2 }}</li>
+            {% empty %}
+            <li class="list-group-item">No recent incomes.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'income_list' %}" class="btn mt-2">View All Incomes</a>
+    </div>
+    <div class="col-md-6">
+        <h3 class="mb-3">Recent Expenses</h3>
+        <ul class="list-group">
+            {% for expense in recent_expenses %}
+            <li class="list-group-item">{{ expense.date }} - {{ expense.description }} ({{ expense.category }}): ₹{{ expense.amount|floatformat:2 }}</li>
+            {% empty %}
+            <li class="list-group-item">No recent expenses.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'expense_list' %}" class="btn mt-2">View All Expenses</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const incomeValue = parseFloat("{{ total_income|default:'0'|floatformat:'2' }}".replace(/,/g, '')) || 0;
+    const expenseValue = parseFloat("{{ total_expense|default:'0'|floatformat:'2' }}".replace(/,/g, '')) || 0;
+    const balanceValue = parseFloat("{{ balance|default:'0'|floatformat:'2' }}".replace(/,/g, '')) || 0;
+
+    new Chart(document.getElementById('incomeChart').getContext('2d'), {
+        type: 'doughnut',
+        data: { labels: ['Income'], datasets: [{ data: [incomeValue], backgroundColor: ['#d9534f'] }] },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    new Chart(document.getElementById('expenseChart').getContext('2d'), {
+        type: 'doughnut',
+        data: { labels: ['Expense'], datasets: [{ data: [expenseValue], backgroundColor: ['#d4a017'] }] },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    new Chart(document.getElementById('balanceChart').getContext('2d'), {
+        type: 'doughnut',
+        data: { labels: ['Positive', 'Negative'], datasets: [{ data: [balanceValue, 0], backgroundColor: ['#B56576', '#e56b6f'] }] },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    new Chart(document.getElementById('dashboardBarChart').getContext('2d'), {
+        type: 'bar',
+        data: { labels: ['Income', 'Expense'], datasets: [{ label: 'Amount (₹)', data: [incomeValue, expenseValue], backgroundColor: ['#d9534f', '#d4a017'] }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    .card { background: #ffffff; border-radius: 10px; padding: 20px; margin: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: transform 0.2s; }
+    .card:hover { transform: translateY(-5px); }
+    .btn { background-color: #4a9c8f; border: none; border-radius: 5px; padding: 10px 20px; color: #ffffff; }
+    .btn:hover { background-color: #3d7f72; }
+    .btn-danger { background-color: #e56b6f; }
+    .btn-danger:hover { background-color: #b22234; }
+    .btn-sm { padding: 5px 10px; font-size: 0.9rem; }
+    .list-group-item { background-color: #ffffff; border-color: #333; display: flex; justify-content: space-between; align-items: center; }
+    .category-badge { background: #f1faee; color: #3d5a80; border-radius: 12px; padding: 4px 12px; font-size: 1rem; margin-right: 10px; }
+    .empty-illustration { text-align: center; margin: 30px 0; }
+    .empty-illustration i { font-size: 3rem; color: #bfc0c0; }
+</style>
+
+<h1 class="text-center mb-4">Categories</h1>
+<div class="card">
+    <div class="text-center mb-3">
+        <a href="{% url 'category_create' %}" class="btn"><i class="fas fa-plus"></i> Add New Category</a>
+    </div>
+    <ul class="list-group">
+        {% for category in categories %}
+        <li class="list-group-item">
+            <span class="category-badge">{{ category.name }}</span>
+            <span>
+                <a href="{% url 'category_update' category.id %}" class="btn btn-sm" title="Edit">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'category_delete' category.id %}" class="btn btn-sm btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this category?');">
+                    <i class="fas fa-trash-alt"></i> Delete
+                </a>
+            </span>
+        </li>
+        {% empty %}
+        <li class="list-group-item empty-illustration">
+            <i class="fas fa-folder-open"></i>
+            <div>No categories found. Start by adding a new one!</div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

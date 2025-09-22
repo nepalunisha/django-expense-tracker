@@ -1,0 +1,12 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<style>
+    .card { background: #ffffff; border-radius: 10px; padding: 20px; margin: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+    .btn { background-color: #4a9c8f; border: none; border-radius: 5px; padding: 10px 20px; color: #ffffff; }
+    .btn:hover { background-color: #3d7f72; }
+</style>
+<h1 class="text-center mb-4">Welcome to Expense Tracker</h1>
+<div class="card">
+    <p class="text-center">Track your incomes and expenses efficiently. Please <a href="{% url 'login' %}" class="btn btn-sm">login</a> or <a href="{% url 'register' %}" class="btn btn-sm">register</a> to get started.</p>
+</div>
+{% endblock %}

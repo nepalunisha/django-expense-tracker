@@ -1,0 +1,49 @@
+
+<!-- Overview
+The Expense Tracker is a Django-based web app for managing personal finances, allowing users to track income, expenses, and categories with a dashboard, reports, and expense forecasting. -->
+
+
+<!-- Features
+User Accounts: Secure registration, login, and logout.
+Categories: Customizable income/expense categories with color-coding.
+Income & Expenses: Add, edit, or delete entries with details (amount, date, category, description).
+Dashboard: Shows total income, expenses, balance, and recent transactions.
+Reports & Forecasting: Financial summaries and expense predictions using Prophet, exportable as CSV.
+Responsive UI: Mobile-friendly design with interactive elements (Bootstrap 5, Font Awesome). -->
+
+<!-- How It Works
+Data Models
+
+Category: name, type (Income/Expense), user.
+Income: amount, date, category, description, user.
+Expense: amount, date, category, description, user. -->
+
+<!-- Forms
+
+Category, income, and expense forms, with category filtering by type.
+
+Views & Pages
+Auth: Register, login, logout.
+Dashboard: Financial overview and forecasts.
+CRUD: Manage categories, incomes, and expenses.
+Forecast: View and export predictions. -->
+
+
+<!-- URLs
+/register/, /login/, /logout/
+/dashboard/
+/categories/, /incomes/, /expenses/
+/forecast/ -->
+
+<!-- UI
+Base template with navbar and alerts.
+Color-coded badges and edit/delete buttons.
+Responsive forms using Bootstrap 5 and Font Awesome. -->
+
+<!-- Tech Stack
+Python 3.x, Django
+pandas, Prophet
+Bootstrap 5, Font Awesome -->
+
+<!-- Conclusion
+This project helped me gain skills in Django, CRUD operations, and data analysis. It’s user-friendly and extensible with features like charts or notifications. -->
